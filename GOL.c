@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "GOL.h"
 
 typedef struct board{
     char *box;
