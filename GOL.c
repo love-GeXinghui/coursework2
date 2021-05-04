@@ -202,7 +202,8 @@ void generation(board* current, board* next) {
 
     int count;
     memcpy(next->box, current->box, (current->width*current->height)*sizeof(char));
-
+//    for(i=0; i < current->width*current->height; i++)
+//        (next->box)[i] = (current->box)[i];
 
 
     for(i=0; i < next->width; i++) {
