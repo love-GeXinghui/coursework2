@@ -28,6 +28,7 @@ double deltaTime = 0.0;
 int selectGame(); //
 int selectStep(); //
 void init();
+void input();
 void display();
 void savearray();
 void saveinit();
@@ -38,13 +39,25 @@ board* createBoard(int w, int h);
 int checkNeighbors(board *b, int x, int y);
 void generation(board* current, board* next);
 
-
+void input(){
+    printf("Please input the width:\n");
+    scanf( "%i", &WIDTH);
+    printf("\nPlease input the height:\n");
+    scanf("%i", &HEIGHT);
+    printf("\nPlease input the size of cell:\n");
+    scanf("%i", &CELLSIZE);
+    printf("\nPlease input the delay time:\n");
+    scanf("%lf", &DTIME);
+    printf("\nPlease input the init number of cell:\n");
+    scanf("%i", &INITNUM);
+    printf("\n11111111111\n");
+}
 
 
 int selectGame() {
     int select1, option1;
     while (0 == 0) {
-        printf("Please input your selection:\n1.Create a new game\n2.Load the old game\n");
+        printf("Please input your selection:\n1.Create a new game by the document\n2.Load the old game\n3.Create a new game by input the parameter\n");
         scanf("%i", &select1);
 
         if (select1 == 1) {
@@ -57,7 +70,13 @@ int selectGame() {
             loadinit("saveinit.txt");
             option1 = 1;
             return option1;
-        } else { printf("Wrong input! Please input the right number"); return -1;}
+        } else if (select1==3){
+            input();
+            printf("\n22222222222\n");
+            option1 = 0;
+            return option1;
+
+        }else{ printf("Wrong input! Please input the right number"); return -1;}
     }
 }
 
@@ -104,7 +123,7 @@ void loadinit(FILE *file){
 void init() {
     int b_width = WIDTH/CELLSIZE;
     int b_height = HEIGHT/CELLSIZE;
-
+    printf("\n3333333333\n");
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -337,7 +356,7 @@ int main(){
 
     glcontext = SDL_GL_CreateContext(window);
 
-    if (option2==0){init();}
+    if (option2==0){printf("44444444444444");init();}
     else if (option2==1){loadarray();}
 
 
@@ -365,23 +384,24 @@ int main(){
                 save();
                 e.type=SDL_QUIT;
             }
-            if (e.key.keysym.sym==SDLK_SPACE){
-                while (1){
-                    SDL_PollEvent(&e);
-                    display();
-                    if (e.type==SDL_QUIT){
-                        return 0;
-                    }
-                    if (e.type==SDL_KEYDOWN){
-                        if (e.type==SDLK_ESCAPE){
-                            save();
-                            e.type=SDL_QUIT;
-                            break;
+            if (e.type==SDL_KEYDOWN){
+                if (e.key.keysym.sym==SDLK_SPACE){
+                    while (1){
+                        SDL_PollEvent(&e);
+                        display();
+                        if (e.type==SDL_QUIT){
+                            return 0;
                         }
-                        if (e.key.keysym.sym==SDLK_p){printf("\nshabichen\n"); break;}}
-                }
-                printf("\nzhaoyimin\n");
-            }
+                        if (e.type==SDL_KEYDOWN){
+                            if (e.key.keysym.sym==SDLK_ESCAPE){
+                                save();
+                                e.type=SDL_QUIT;
+                                return 0;
+                            }
+                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n"); break;}}
+                    }
+                    printf("\nzhaoyimin\n");
+                }}
             printf("\nzhaoyimin250\n");
         }
         while(e.type != SDL_QUIT){
@@ -391,23 +411,24 @@ int main(){
                 save();
                 e.type=SDL_QUIT;
             }
-            if (e.key.keysym.sym==SDLK_SPACE){
-                while (1){
-                    SDL_PollEvent(&e);
-                    display();
-                    if (e.type==SDL_QUIT){
-                        return 0;
-                    }
-                    if (e.type==SDL_KEYDOWN){
-                        if (e.type==SDLK_ESCAPE){
-                            save();
-                            e.type=SDL_QUIT;
-                            break;
+            if (e.type==SDL_KEYDOWN){
+                if (e.key.keysym.sym==SDLK_SPACE){
+                    while (1){
+                        SDL_PollEvent(&e);
+                        display();
+                        if (e.type==SDL_QUIT){
+                            return 0;
                         }
-                        if (e.key.keysym.sym==SDLK_p){printf("\nshabichen\n"); break;}}
-                }
-                printf("\nzhaoyimin\n");
-            }
+                        if (e.type==SDL_KEYDOWN){
+                            if (e.key.keysym.sym==SDLK_ESCAPE){
+                                save();
+                                e.type=SDL_QUIT;
+                                return 0;
+                            }
+                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n");e.key.keysym.sym == SDLK_p; break;}}
+                    }
+                    printf("\nzhaoyimin\n");
+                }}
             printf("\nzhaoyimin250\n");
         }
     }
@@ -426,23 +447,24 @@ int main(){
                 save();
                 e.type=SDL_QUIT;
             }
-            if (e.key.keysym.sym==SDLK_SPACE){
-                while (1){
-                    SDL_PollEvent(&e);
-                    display();
-                    if (e.type==SDL_QUIT){
-                        return 0;
-                    }
-                    if (e.type==SDL_KEYDOWN){
-                        if (e.type==SDLK_ESCAPE){
-                            save();
-                            e.type=SDL_QUIT;
-                            break;
+            if (e.type==SDL_KEYDOWN){
+                if (e.key.keysym.sym==SDLK_SPACE){
+                    while (1){
+                        SDL_PollEvent(&e);
+                        display();
+                        if (e.type==SDL_QUIT){
+                            return 0;
                         }
-                        if (e.key.keysym.sym==SDLK_p){printf("\nshabichen\n"); break;}}
-                }
-                printf("\nzhaoyimin\n");
-            }
+                        if (e.type==SDL_KEYDOWN){
+                            if (e.key.keysym.sym==SDLK_ESCAPE){
+                                save();
+                                e.type=SDL_QUIT;
+                                return 0;
+                            }
+                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n");e.key.keysym.sym == SDLK_p; break;}}
+                    }
+                    printf("\nzhaoyimin\n");
+                }}
             printf("\nzhaoyimin250\n");
         }
     }
