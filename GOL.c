@@ -6,124 +6,17 @@
 #include <time.h>
 #include "GameOfLife.h"
 
-typedef struct board{
-    char *box;
-    int width;
-    int height;
-} board;
-
-board* next = NULL;
-board* current = NULL;
-int STEP;
-int WIDTH;
-int HEIGHT;
-int CELLSIZE;
-int INITNUM;
-int lastTime = 0;
-int newTime = 0;
-double DTIME;
-double deltaTime = 0.0;
 
 
-int selectGame(); //
-int selectStep(); //
-void init();
-void input();
-void display();
-void savearray();
-void saveinit();
-void save();
-void loadinit(FILE *file);
-void loadarray();
-board* createBoard(int w, int h);
-int checkNeighbors(board *b, int x, int y);
-void generation(board* current, board* next);
-
-void input(){
-    printf("Please input the width:\n");
-    scanf( "%i", &WIDTH);
-    printf("\nPlease input the height:\n");
-    scanf("%i", &HEIGHT);
-    printf("\nPlease input the size of cell:\n");
-    scanf("%i", &CELLSIZE);
-    printf("\nPlease input the delay time:\n");
-    scanf("%lf", &DTIME);
-    printf("\nPlease input the init number of cell:\n");
-    scanf("%i", &INITNUM);
-    printf("\n11111111111\n");
-}
 
 
-int selectGame() {
-    int select1, option1;
-    while (0 == 0) {
-        printf("Please input your selection:\n1.Create a new game by the document\n2.Load the old game\n3.Create a new game by input the parameter\n");
-        scanf("%i", &select1);
-
-        if (select1 == 1) {
-            loadinit("init.txt");
-            option1 = 0;
-            return option1;
 
 
-        } else if (select1 == 2) {
-            loadinit("saveinit.txt");
-            option1 = 1;
-            return option1;
-        } else if (select1==3){
-            input();
-            printf("\n22222222222\n");
-            option1 = 0;
-            return option1;
 
-        }else{ printf("Wrong input! Please input the right number"); return -1;}
-    }
-}
-
-int selectStep(){
-    int select2, option2;
-
-    while (0==0) {
-        printf("Please choose the way to generation:\n1.Input steps\n2.Autorun\n");
-        scanf("%i", &select2);
-        if (select2 == 1) {
-            printf("Please input the amount of step:\n");
-            scanf("%i",&option2);
-            STEP = option2;
-            return STEP;
-        }
-        else if(select2 == 2){
-            option2=1;
-            return option2;
-        }
-        else {printf("Wrong input!Please input the right number");return -1;}
-    }
-}
-
-void loadinit(FILE *file){
-
-    FILE *fp;
-    fp = fopen(file, "r");
-    if(fp==NULL){
-        printf("Open file error!");
-        exit(1);
-    }
-    fscanf(fp, "WORD_WIDTH %d", &WIDTH);
-
-    fscanf(fp, "\nWORD_HEIGHT %d", &HEIGHT);
-
-    fscanf(fp, "\nCELLSIZE %d", &CELLSIZE);
-
-    fscanf(fp, "\nDELTATIME %lf", &DTIME);
-
-    fscanf(fp, "\nINITCELLNUM %d", &INITNUM);
-    fclose(fp);
-}
 
 void init() {
     int b_width = WIDTH/CELLSIZE;
     int b_height = HEIGHT/CELLSIZE;
-    printf("\n3333333333\n");
     glClearColor(0.0,0.0,0.0,0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -243,73 +136,9 @@ void generation(board* current, board* next) {
     }
 }
 
-void savearray(){
-    FILE *fp;
-    fp = fopen("savearray.txt", "w");
-    if(fp==NULL){
-        printf("Open file error!");
-        exit(1);
-    }
-    for(int i=0; i<WIDTH*HEIGHT/CELLSIZE/CELLSIZE; i++){
-        fprintf(fp, "%d ", (current->box)[i]);
-    }
-    fclose(fp);
-}
-
-void saveinit(){
-    char c;
-    FILE *fpin;
-    FILE *fpout;
-    fpin = fopen("init.txt", "r");
-    fpout = fopen("saveinit.txt", "w");
-    if(fpin==NULL){
-        printf("Open file error!");
-        exit(1);
-    }
-    if(fpout==NULL){
-        printf("Open file error!");
-        exit(1);
-    }
-    while((c=fgetc(fpin))!=EOF)
-        fputc(c,fpout);
-    fclose(fpin);
-    fclose(fpout);
-}
-
-void save(){
-    savearray();
-    saveinit();
-}
-
-void loadarray(){
-    int b_width = WIDTH/CELLSIZE;
-    int b_height = HEIGHT/CELLSIZE;
-
-    glClearColor(0.0,0.0,0.0,0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0,WIDTH,HEIGHT,0,-1,1);
-    glMatrixMode(GL_MODELVIEW);
-
-    current = createBoard(b_width,b_height);
-    FILE *fp;
-    fp = fopen("savearray.txt", "r");
-    if(fp==NULL){
-        printf("Open file error!");
-        exit(1);
-    }
-    for(int i=0; i<WIDTH*HEIGHT/CELLSIZE/CELLSIZE; i++){
-        fscanf(fp, "%d", &(current->box)[i]);
-    }
-    fclose(fp);
-    next = createBoard(b_width,b_height);
-}
 
 
-int main(){
-
+int game(){
 
 
 
@@ -478,6 +307,10 @@ int main(){
 
     return 0;
 
+}
+int main(){
+
+   game();
 
 }
 
