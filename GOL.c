@@ -1,15 +1,113 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <GL/gl.h>
-#include <time.h>
+
 #include "GameOfLife.h"
+#include "G.h"
+#include "GOL.h"
 
 
 
 
+int STEP;
+int WIDTH;
+int HEIGHT;
+int CELLSIZE;
+int INITNUM;
 
+double DTIME;
+board* next = NULL;
+board* current = NULL;
+int lastTime = 0;
+int newTime = 0;
+double deltaTime = 0.0;
+
+board* createBoard(int w, int h);
+int checkNeighbors(board *b, int x, int y);
+void generation(board* current, board* next);
+
+
+int loadinit(FILE *file){
+
+    FILE *fp;
+    fp = fopen(file, "r");
+    if(fp==NULL){
+        printf("Open file error!");
+
+        return 0;
+    }
+    fscanf(fp, "WORD_WIDTH %d", &WIDTH);
+
+    fscanf(fp, "\nWORD_HEIGHT %d", &HEIGHT);
+
+    fscanf(fp, "\nCELLSIZE %d", &CELLSIZE);
+
+    fscanf(fp, "\nDELTATIME %lf", &DTIME);
+
+    fscanf(fp, "\nINITCELLNUM %d", &INITNUM);
+    fclose(fp);
+}
+
+void savearray(){
+    FILE *fp;
+    fp = fopen("savearray.txt", "w");
+    if(fp==NULL){
+        printf("Open file error!");
+        exit(1);
+    }
+    for(int i=0; i<WIDTH*HEIGHT/CELLSIZE/CELLSIZE; i++){
+        fprintf(fp, "%d ", (current->box)[i]);
+    }
+    fclose(fp);
+}
+
+void saveinit(){
+    char c;
+    FILE *fpin;
+    FILE *fpout;
+    fpin = fopen("init.txt", "r");
+    fpout = fopen("saveinit.txt", "w");
+    if(fpin==NULL){
+        printf("Open file error!");
+        exit(1);
+    }
+    if(fpout==NULL){
+        printf("Open file error!");
+        exit(1);
+    }
+    while((c=fgetc(fpin))!=EOF)
+        fputc(c,fpout);
+    fclose(fpin);
+    fclose(fpout);
+}
+
+void save(){
+    savearray();
+    saveinit();
+}
+
+void loadarray(){
+    int b_width = WIDTH/CELLSIZE;
+    int b_height = HEIGHT/CELLSIZE;
+
+    glClearColor(0.0,0.0,0.0,0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0,WIDTH,HEIGHT,0,-1,1);
+    glMatrixMode(GL_MODELVIEW);
+
+    current = createBoard(b_width,b_height);
+    FILE *fp;
+    fp = fopen("savearray.txt", "r");
+    if(fp==NULL){
+        printf("Open file error!");
+        exit(1);
+    }
+    for(int i=0; i<WIDTH*HEIGHT/CELLSIZE/CELLSIZE; i++){
+        fscanf(fp, "%d", &(current->box)[i]);
+    }
+    fclose(fp);
+    next = createBoard(b_width,b_height);
+}
 
 
 
@@ -114,8 +212,6 @@ void generation(board* current, board* next) {
 
     int count;
     memcpy(next->box, current->box, (current->width*current->height)*sizeof(char));
-//    for(i=0; i < current->width*current->height; i++)
-//        (next->box)[i] = (current->box)[i];
 
 
     for(i=0; i < next->width; i++) {
@@ -185,7 +281,7 @@ int game(){
 
     glcontext = SDL_GL_CreateContext(window);
 
-    if (option2==0){printf("44444444444444");init();}
+    if (option2==0){init();}
     else if (option2==1){loadarray();}
 
 
@@ -227,11 +323,11 @@ int game(){
                                 e.type=SDL_QUIT;
                                 return 0;
                             }
-                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n"); break;}}
+                            if (e.key.keysym.sym==SDLK_SPACE){ break;}}
                     }
-                    printf("\nzhaoyimin\n");
+
                 }}
-            printf("\nzhaoyimin250\n");
+
         }
         while(e.type != SDL_QUIT){
             SDL_PollEvent(&e);
@@ -254,11 +350,11 @@ int game(){
                                 e.type=SDL_QUIT;
                                 return 0;
                             }
-                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n");e.key.keysym.sym == SDLK_p; break;}}
+                            if (e.key.keysym.sym==SDLK_SPACE){ break;}}
                     }
-                    printf("\nzhaoyimin\n");
+
                 }}
-            printf("\nzhaoyimin250\n");
+
         }
     }
     else if(option==1){
@@ -290,11 +386,11 @@ int game(){
                                 e.type=SDL_QUIT;
                                 return 0;
                             }
-                            if (e.key.keysym.sym==SDLK_SPACE){printf("\nshabichen\n");e.key.keysym.sym == SDLK_p; break;}}
+                            if (e.key.keysym.sym==SDLK_SPACE){e.key.keysym.sym == SDLK_p; break;}}
                     }
-                    printf("\nzhaoyimin\n");
+
                 }}
-            printf("\nzhaoyimin250\n");
+
         }
     }
 
@@ -308,9 +404,5 @@ int game(){
     return 0;
 
 }
-int main(){
 
-   game();
-
-}
 

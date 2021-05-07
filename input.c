@@ -1,13 +1,17 @@
 //
 // Created by coral on 2021/5/6.
 //
-#include <stdio.h>
-#include <stdlib.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <GL/gl.h>
-#include <time.h>
-#include "GameOfLife.h"
+#include"GameOfLife.h"
+
+
+
+int STEP;
+int WIDTH;
+int HEIGHT;
+int CELLSIZE;
+int INITNUM;
+
+double DTIME;
 void input(){
     printf("Please input the width:\n");
     scanf( "%i", &WIDTH);
@@ -57,7 +61,8 @@ int selectStep(){
             printf("Please input the amount of step:\n");
             scanf("%i",&option2);
             STEP = option2;
-            return STEP;
+            option2=0;
+            return option2;
         }
         else if(select2 == 2){
             option2=1;

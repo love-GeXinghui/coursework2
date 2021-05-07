@@ -1,111 +1,163 @@
-//
-// Created by coral on 2021/5/6.
-//
-#include "GOL.h"
-#include "GOl.c"
-#include <stdio.h>
-#include <stdlib.h>
-#define A 0
-#define B 1
-#define C 2
-#define D 3
-#define E 4
-#define F 100
-#define G -1
+
+#include "GameOfLife.h"
 
 
-int testSelectGame(int input);
-int testSelectStep(int input);
-void testLoadInit();
-int testCreateBoard(int x, int y);
+#define JsonStrSize 10000
+#define Presubmission 1
 
 
 
-int testSelectGame(int input){
-    if (selectGame(input)==1||selectGame(input)==2||selectGame(input)==3){
-        printf("\n%d Pass the test of selectGame\n", input);
-        return 1;
-    }
-    else {
-        printf("\n%d Fail the test of selectGame\n", input);
-        return  0;
-    }
+
+
+
+
+int IsAutoGradinng = 0;
+int mustShow=0;
+int stage= 1;
+char* JsonStr;
+board* current;
+
+
+
+void tell (char* s)
+{
+    if (Presubmission && stage == 1)
+        printf ("%s", s);
 }
+// test createboard()
+int t_createBoard () // 8 marks
+{
+    int r;
+    int m=0;
+    char s[100];
+    board* a;
+    int fail = 0;
 
-
-int testSelectStep(int input){
-    if (selectGame(input)==1||selectGame(input)==2||selectGame(input)==3){
-        printf("\n%d Pass the test of selectGame\n", input);
-        return 1;
-    }
-    else {
-        printf("\n%d Fail the test of selectGame\n", input);
-        return  0;
-    }
-}
-
-void testLoadInit(){
-    if (loadinit("none.txt")==0){
-        printf("\n\n\nthe loadinit pass the test successful when load an empty file\n\n\n");
-    }
-    else
+    tell ("\n*** Checking function createboard ***\n");
+    tell ("#Checking it can handle invalid parameters, boardwidth<=0:\n");
+    r = createBoard (-200,200);
+    if (r == NULL)
     {
-        printf("\n\n\nthe loadinit pass the test failed when load an empty file\n\n\n");
+        m++; // 1
+        tell ("Passed\n");
     }
+    else tell("Failed\n");
+    tell ("#Checking it can handle invalid parameters, boardheight<=0:\n");
+    r = createBoard (200,-400);
+    if (r == NULL)
+    {
+        m++; // 1
+        tell ("Passed\n");
+    }
+    else tell("Failed\n");
+    tell ("#Checking it can handle invalid parameters, boardwidth<=0 and boardheight<=0:\n");
+    r = createBoard (-300,-400);
+    if (r == NULL)
+    {
+        m++; // 1
+        tell ("Passed\n");
+    }
+    else tell("Failed\n");
+    tell ("#Checking it can handle invalid parameters, 0<boardwidth<1 and 0<boardheight<1:\n");
+    r = createBoard (0.01,0.01);
+    if (r == NULL)
+    {
+        m++; // 1
+        tell ("Passed\n");
+    }
+    else tell("Failed\n");
+    tell ("#Checking it does accept valid parameters:\n");
+    r = createBoard (300,300);
+    if (r != NULL)
+    {
+        m++; // 1
+        tell ("Passed\n");
+    }
+    else tell("Failed\n");
+    tell ("#Checking board is initialised correctly:\n");
+    a = createBoard(400,400);
+    if (a)
+    {
+        m+=3;
+        tell ("Passed\n");
+    }
+    else tell("Failed\n");
+
+
+    printf ("%i/8 for function createboard", m);
+
+
+
+
+    return m;
 }
 
-int testCreateBoard(int x, int y){
-    if (createBoard(x,y)==NULL){
-        printf("\nthe input x=%d y=%d cannot create the board\n" ,x,y);
-        return 0;
+
+
+int t_save_load_init(){
+    int r=0;
+    int m=0;
+    char s[100];
+    int fail = 0;
+    tell ("\n*** Checking function loadinit and saveinit ***\n");
+    FILE *fp;
+    fp = fopen("init.txt", "w");
+    if(fp==NULL){
+        printf("Open file error!");
+        exit(1);
     }
-    else{
-        printf("\nthe input x=%d y=%d could create the board\n" ,x,y);
-        return 1;}
+    fprintf(fp, "WORD_WIDTH 800\n");
+    fprintf(fp, "WORD_HEIGHT 800\n");
+    fprintf(fp, "CELLSIZE 10\n");
+    fprintf(fp, "DELTATIME 0.1\n");
+    fprintf(fp, "INITCELLNUM 1000\n");
+    fclose(fp);
+    saveinit();
+    loadinit("saveinit.txt");
+    if(WIDTH==800)m++;
+    if(HEIGHT==800)m++;
+    if(CELLSIZE==10)m++;
+    if(DTIME==0.1)m++;
+    if(INITNUM==1000)m++;
+
+    if(m==5) tell("Passed\n");
+    else tell("Failed\n");
+
+    sprintf (s,"%i/5 for function loadinit and saveinit", m);
+
+    if (Presubmission)
+        printf ("%s\n", s);
+    else
+        AddTestString (m, 5, s, 0);
+    return m;
 }
 
-int main(){
-    int TSG=0,TSS=0,TCB=0;
+int main ()
+{
+
+    int tot = 0;
+
+
+    tell ("\t$$$ Checking your functions, behold $$$\n");
+    tell ("\t=========================================\n");
+    tell ("Started ...\n");
+
+
+    tot += t_createBoard ();
+
+    tot += t_save_load_init();
 
 
 
-    // test the select game
-    TSG += testSelectGame(A);
-    TSG += testSelectGame(B);
-    TSG += testSelectGame(C);
-    TSG += testSelectGame(D);
-    TSG += testSelectGame(E);
-    TSG += testSelectGame(F);
-    TSG += testSelectGame(G);
-    printf("\n\n\n\nThe result of selectGame we hope is 3.\n");
-    printf("\n\n\n\nThe result of selectGame we test is %d \n",TSG);
 
 
-    //test the select of game
-    TSS += testSelectStep(A);
-    TSS += testSelectStep(B);
-    TSS += testSelectStep(C);
-    TSS += testSelectStep(D);
-    TSS += testSelectStep(E);
-    TSS += testSelectStep(F);
-    TSS += testSelectStep(G);
-    printf("\n\n\n\nThe result of selectStep we hope is 2.\n");
-    printf("\n\n\n\nThe result of selectStep we test is %d \n",TSS);
+    printf ("\n---------------------------------------------------\n");
+    printf ("\t\tTotal mark = %i/13\n", tot);
+    printf ("---------------------------------------------------\n\n");
+
+    tell ("Finished\n");
 
 
-    //test the load a empty file
-    testLoadInit();
-
-    //test the value input whether create the board
-    TCB+=testCreateBoard(A,B);
-    TCB+=testCreateBoard(B,A);
-    TCB+=testCreateBoard(B,C);
-    TCB+=testCreateBoard(C,B);
-    TCB+=testCreateBoard(A,G);
-    TCB+=testCreateBoard(B,G);
-    TCB+=testCreateBoard(G,G);
-    printf("\n\n\n\nThe result of selectStep we hope is 2.\n");
-    printf("\n\n\n\nThe result of selectStep we test is %d \n",TCB);
-
+    return 0;
 }
 
